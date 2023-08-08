@@ -1,0 +1,41 @@
+﻿Projede Db kullanma adımları
+1. appsettings.json da Connectionstring bloğu oluşturmak.
+  "ConnectionStrings": {
+     "DBConStr": "Data Source=ComputerName=>\\SQL2019;Initial Catalog=ProjectName=>;Persist Security Info=True;User ID=UserId=>;Password=Password=>"||;TrustServerCertificate=True;Encrypt=False;
+				 // Server=myServerAddress;Database=myDataBase;User Id=myUsername;Password=myPassword;
+				 // Trusted Connection=> Server=myServerAddress;Database=myDataBase;Trusted_Connection=True;
+  }
+ 
+2. Eklenecek Nuget Paketleri
+Microsoft.EntityFrameWorkCore
+Microsoft.EntityFrameWorkCore.Design
+Microsoft.EntityFrameWorkCore.SqlServer
+Microsoft.EntityFrameWorkCore.Tools
+
+
+Microsoft.AspNetCore
+Microsoft.EntityFrameWorkCore.Design
+Microsoft.EntityFrameWorkCore.SqlServer
+Microsoft.EntityFrameWorkCore.Tools
+
+3. DataContext
+public DataContext(DbContextOptions<DataContext> options): base(options)
+{
+}
+
+4. Program.cs içerisinde builder sınıfına SqlServer bağlantısını öğretiyoruz.
+builder.Services.AddDbContext<LExam.Context.DataContext>(options =>
+{
+	options.UseSqlServer(builder.Configuration.GetConnectionString("DBConStr"));
+});
+
+5. Modellerimizi oluşturuyoruz
+5.1 Normalizasyon tarafı önemli. BaseObject nesnesi oluşturulup, oluşturulan modellere referans gösteriliyor.
+
+6.DbSet
+public DbSet<Kullanici> Kullanici { get; set; }
+
+7. "Package Manager Console" -> Migration
+add-migration 1001_ilk
+
+8. udpate-database
